@@ -8,7 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 @Component
-public class BasketService {
+public class BasketService
+{
     private final List<Product> basketOfProducts = new ArrayList<>();
 
     public List<Product> getProducts() {

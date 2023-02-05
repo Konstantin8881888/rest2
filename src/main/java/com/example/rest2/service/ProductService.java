@@ -29,22 +29,17 @@ public class ProductService {
         if (partTitle != null) {
             spec = spec.and(ProductSpecification.likeTitle(partTitle));
         }
-        return repository.findAll(spec, PageRequest.of(0, 5));
+        return repository.findAll(spec, PageRequest.of(page, 5));
     }
 
     public Product findOneById(Long id) {
-        Product product = null;
-        Optional<Product> byId = repository.findById(id);
-        if (byId.isPresent()) {
-            product = byId.get();
-        }
-        assert product != null;
-        return product;
+        return repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("No product with id: " + id));
     }
 
     @Transactional
     public Product update(ProductDto productDto) {
-        Product product = repository.findById(productDto.getId()).orElseThrow(() -> new RuntimeException("Unreachable update"));
+        Product product = findOneById(productDto.getId());
         product.setTitle(productDto.getTitle());
         product.setPrice(productDto.getPrice());
         return product;
